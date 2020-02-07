@@ -14,7 +14,7 @@ Useful [Fabric](http://www.fabfile.org/installing-1.x.html) tasks for
 ## Install
 
 ```
-$ pip install git+https://ghe.corp.yahoo.co.jp/yohtsuji/fabric-chef.git [-U]
+$ pip install git+https://github.com/crossroad0201/fabric-chef.git [-U]
 ```
 
 ## Create fabfile.py
