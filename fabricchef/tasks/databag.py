@@ -2,19 +2,24 @@
 
 from __future__ import print_function
 
-from fabric.api import *
-from fabric.colors import green,blue,yellow,red
+from fabric.colors import green
 
 from fabricchef.api import *
+
 
 def parse_databag_item_name(databag_item_name):
     if "." in databag_item_name:
         return databag_item_name.split(".")
     else:
-        abort(red("Invalid databag_item_name. Specify DataBag name and item name with dot delimited, like this foo.bar - %s" % databag_item_name))
+        abort(red(
+            "Invalid databag_item_name. Specify DataBag name and item name with dot delimited, like this foo.bar - %s" %
+            databag_item_name
+        ))
+
 
 def format_databag_item_name(databag_name, item_name):
     return '%s.%s' % (databag_name, item_name)
+
 
 def get_exists_databag_item_names():
     # vault list がJSON出力をサポートしていないのでテキストを改行で切ってます
@@ -25,6 +30,7 @@ def get_exists_databag_item_names():
         for databag_item_name in databag_item_names:
             exists_databag_item_names.append(format_databag_item_name(databag_name, databag_item_name))
     return exists_databag_item_names
+
 
 @task
 def list():
@@ -42,6 +48,7 @@ def list():
         for i in databag_item_names:
             print(i)
 
+
 @task
 def show(databag_item_name):
     """
@@ -51,6 +58,7 @@ def show(databag_item_name):
     """
     (databag_name, item_name) = parse_databag_item_name(databag_item_name)
     knife('vault show %s %s -p all' % (databag_name, item_name), always_run=True)
+
 
 # TODO Upsertにしたい
 @task
@@ -75,4 +83,4 @@ def apply(databag_item_name, item_value, *admins):
         print(green("Grant administration permission to %s..." % (admins_str)))
         knife('vault update %s %s -A "%s" -M client' % (databag_name, item_name, admins_str))
 
-    show_databag_item(databag_item_name)
+    show(databag_item_name)

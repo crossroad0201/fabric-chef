@@ -2,10 +2,10 @@
 
 from __future__ import print_function
 
-from fabric.api import *
-from fabric.colors import green,blue,yellow,red
+from fabric.colors import yellow
 
 from fabricchef.api import *
+
 
 @task
 def conf(knife_conf_path='./.chef/knife.rb'):
@@ -49,4 +49,3 @@ def dryrun():
     print(red("!!!!! DRY-RUN mode !!!!!"))
     print("")
     env.DryRun = True
-

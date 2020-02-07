@@ -2,10 +2,10 @@
 
 from __future__ import print_function
 
-from fabric.api import *
-from fabric.colors import green,blue,yellow,red
+from fabric.colors import green
 
 from fabricchef.api import *
+
 
 @task
 def run(node_name, *run_lists):
@@ -20,6 +20,14 @@ def run(node_name, *run_lists):
     """
     print(green("Running recipe(s) %s on the node %s..." % (",".join(run_lists), node_name)))
     if env.DryRun:
-        knife('ssh \'name:%s\' \'sudo chef-client --override-runlist "%s" --why-run\'' % (node_name, ",".join(run_lists)), always_run=True)
+        knife(
+            'ssh \'name:%s\' \'sudo chef-client --override-runlist "%s" --why-run\'' %
+            (node_name, ",".join(run_lists)),
+            always_run=True
+        )
     else:
-        knife('ssh \'name:%s\' \'sudo chef-client --override-runlist "%s"\'' % (node_name, ",".join(run_lists)), always_run=True)
+        knife(
+            'ssh \'name:%s\' \'sudo chef-client --override-runlist "%s"\'' %
+            (node_name, ",".join(run_lists)),
+            always_run=True
+        )

@@ -2,10 +2,10 @@
 
 from __future__ import print_function
 
-from fabric.api import *
-from fabric.colors import green,blue,yellow,red
+from fabric.colors import green
 
 from fabricchef.api import *
+
 
 @task
 def list():
@@ -13,6 +13,7 @@ def list():
     List all Roles in Organization.
     """
     knife('role list', always_run=True)
+
 
 @task
 def apply(role_path='./roles/*'):
