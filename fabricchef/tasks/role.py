@@ -15,7 +15,7 @@ def list():
     """
     List all Roles in Organization.
     """
-    def to_table(result):
+    def print_to_table(result):
         j = json.loads(result)
 
         print(blue("Roles:", bold=True))
@@ -28,7 +28,7 @@ def list():
 
     printf(
         knife3('role list', always_run=True),
-        to_table
+        print_to_table
     )
 
 
