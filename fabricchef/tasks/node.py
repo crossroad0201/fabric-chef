@@ -45,7 +45,7 @@ def list():
         print("%s Node(s)" % len(j))
 
     printf(
-        knife('search node "chef_environment:%s"' % env.ChefEnv, always_run=True),
+        knife3('search node "chef_environment:%s"' % env.ChefEnv, always_run=True),
         print_to_table
     )
 
@@ -75,7 +75,7 @@ def show(node_name, show_all_attrs='False'):
 
         print(blue("Device:", bold=True))
         table2 = PrettyTable()
-        table2.add_column("CPU Cores", a['cpu']['cores'], 'r')
+        table2.add_column("CPU Cores", [a['cpu']['cores']], 'r')
         table2.add_column("Memory Free/Total",
                           ["%s / %s" % (
                               a['memory']['free'],
