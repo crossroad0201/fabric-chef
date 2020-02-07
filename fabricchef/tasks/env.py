@@ -42,8 +42,8 @@ def show():
 
         print(blue("Environment:", bold=True))
         table1 = PrettyTable()
-        table1.add_column("Name", j['name'], 'l')
-        table1.add_column("Description", j['description'], 'l')
+        table1.add_column("Name", [j['name']], 'l')
+        table1.add_column("Description", [j['description']], 'l')
         print(table1)
 
         print(blue("Cookbook versions:", bold=True))

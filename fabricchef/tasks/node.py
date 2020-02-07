@@ -64,28 +64,28 @@ def show(node_name, show_all_attrs='False'):
 
         print(blue("Node:", bold=True))
         table1 = PrettyTable()
-        table1.add_column("NodeName", j['name'], 'l')
-        table1.add_column("Platform", "%s(%s)" % (a['platform'], a['platform_version']), 'l')
-        table1.add_column("FQDN", a['fqdn'], 'l')
-        table1.add_column("IP Address", a['ipaddress'], 'l')
-        table1.add_column("Uptime", a['uptime'], 'l')
-        table1.add_column("Environment", j['chef_environment'], 'l')
-        table1.add_column("RunList", j['run_list'], 'l')
+        table1.add_column("NodeName", [j['name']], 'l')
+        table1.add_column("Platform", ["%s(%s)" % (a['platform'], a['platform_version'])], 'l')
+        table1.add_column("FQDN", [a['fqdn']], 'l')
+        table1.add_column("IP Address", [a['ipaddress']], 'l')
+        table1.add_column("Uptime", [a['uptime']], 'l')
+        table1.add_column("Environment", [j['chef_environment']], 'l')
+        table1.add_column("RunList", [j['run_list']], 'l')
         print(table1)
 
         print(blue("Device:", bold=True))
         table2 = PrettyTable()
         table2.add_column("CPU Cores", a['cpu']['cores'], 'r')
-        table2.add_column("Memory Free/Total", "%s / %s" %
-                          (
+        table2.add_column("Memory Free/Total",
+                          ["%s / %s" % (
                               a['memory']['free'],
                               a['memory']['total']
-                          ), 'r')
-        table2.add_column("Disk Free/Total (KB)", "%s / %s" %
-                          (
+                          )], 'r')
+        table2.add_column("Disk Free/Total (KB)",
+                          ["%s / %s" %(
                               a['filesystem']['by_mountpoint']['/']['kb_available'],
                               a['filesystem']['by_mountpoint']['/']['kb_size']
-                          ), 'r')
+                          )], 'r')
         print(table2)
 
     def print_to_table(result):
@@ -93,9 +93,9 @@ def show(node_name, show_all_attrs='False'):
 
         print(blue("Node:", bold=True))
         table = PrettyTable()
-        table.add_column("NodeName", j['name'], 'l')
-        table.add_column("Environment", j['chef_environment'], 'l')
-        table.add_column("RunList", j['run_list'], 'l')
+        table.add_column("NodeName", [j['name']], 'l')
+        table.add_column("Environment", [j['chef_environment']], 'l')
+        table.add_column("RunList", [j['run_list']], 'l')
         print(table)
 
     if show_all_attrs in ('True', 'true', 'yes'):
