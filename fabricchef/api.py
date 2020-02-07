@@ -41,17 +41,16 @@ def knife3(command_and_option, always_run=False):
     return fn_knife
 
 
-def printf(fn_knife, to_table):
+def printf(fn_knife, print_to_table):
     def decorator_for(output_format):
         if output_format == 'json':
             return 'json', lambda s: print(s)
         elif output_format == 'table':
-            return 'json', lambda s: print(to_table(s))
+            return 'json', lambda s: print_to_table(s)
         else:
             return 'text', lambda s: print(s)
 
     (knife_format, decorate_and_print) = decorator_for(env.OutputFormat)
-    print('%s -> %s %s' % (env.OutputFormat, knife_format, decorate_and_print))
     result = fn_knife(knife_format)
     decorate_and_print(result)
 
