@@ -30,7 +30,7 @@ def list():
         table.align["Uptime"] = 'l'
         table.align["Environment"] = 'l'
         table.align["RunList"] = 'l'
-        for i in j:
+        for i in j['rows']:
             a = i['automatic']
             table.add_row([
                 i['name'],
