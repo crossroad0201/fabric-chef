@@ -60,7 +60,7 @@ def printf(fn_knife,
            as_table,
            as_text=('text', lambda s: print(s)),
            as_json=('json', lambda s: print(s)),
-           as_flat=('json', print_dict_as_flat_table)
+           as_flat=('json', lambda s: print_dict_as_flat_table(json.loads(s)))
            ):
     def decorator_for(output_format):
         if output_format == 'json':
