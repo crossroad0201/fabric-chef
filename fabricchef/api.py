@@ -46,7 +46,7 @@ def shorten(value, slen, elen):
         return value
 
 
-def print_dict_as_flat_table(knife_output, key_max_len=-1, value_max_len=100):
+def print_dict_as_flat_table(knife_output):
     j = json.loads(knife_output)
     table = PrettyTable(["Key", "Value"])
     table.align["Key"] = 'l'
