@@ -4,6 +4,10 @@ Fabric Chef
 Useful [Fabric](http://www.fabfile.org/installing-1.x.html) tasks for
 [Chef](https://www.chef.io/) operations.
 
+Chef `knife` command is too primitive, so many commands have to execute.
+
+This library is wrapper for the Chef `knife` command and provide useful tasks for Chef operation in Command-Line interface.
+
 ```
 $ fab node.list:prod
 [localhost] local: knife search node "chef_environment:prod" -F json
@@ -37,8 +41,8 @@ Done.
 
 # Requirement
 
-* Python 2.7.x (Do NOT support Python 3.x)
-* Chef Workstation 
+* Python 2.7.x (Do NOT support Python 3.x.)
+* Chef Workstation (`knife` command) 
 
 # Getting started
 
@@ -49,6 +53,8 @@ $ pip install git+https://github.com/crossroad0201/fabric-chef.git [-U]
 ```
 
 ## Recommended directory structure
+
+Put the Fabric script file called 'fabfile.py' in your chef repository.
 
 ```
 /[Your Chef repository]
@@ -67,6 +73,10 @@ $ pip install git+https://github.com/crossroad0201/fabric-chef.git [-U]
 ```
 
 ## Create fabfile.py
+
+`fabfile.py` is Python script file for define the Fabric tasks.
+
+You will be available the tasks for Chef operation by import this library. 
 
 ```python
 # -*- coding: utf-8 -*-
@@ -91,6 +101,8 @@ def custom_task():
 ```
 
 ## Run
+
+Run `fab` command with any task.
 
 ```
 $ fab env.list
@@ -182,8 +194,3 @@ Displaying detailed information for task 'node.add':
 
     Arguments: chef_env, host_name, node_name=None
 ```
-  
-## API
-
-TBD
-
