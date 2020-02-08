@@ -24,7 +24,7 @@ $ pip install git+https://github.com/crossroad0201/fabric-chef.git [-U]
 
 from __future__ import print_function
 
-# Import required fabchef members. (Must be use from-import syntax.)
+# Import required fabric-chef members. (Must be use from-import syntax.)
 from fabricchef.api import *
 from fabricchef.tasks.common import *
 
@@ -45,41 +45,36 @@ $ fab env.list
 
 # Usage
 
-### Run Fabric Tasks 
+### Basic usage
 
 * Execute single command. 
   ```
   $ fab env.list
   ```
 
-* Execute multiple commands.(Sequential)
+* Execute multiple commands.(Execute sequentially)
   ```
   $ fab env.list databag.list
   ```
 
-* Execute command with specified Chef Envitonment.
+* Dry-Run.
   ```
-  $ fab chefenv:prod_ssk env.show
-  ```
-
-* Execute command in DRY-RUN mode.
-  ```
-  $ fab dryrun chefenv:prod_ssk recipe.run:foobar.example.com,"role[install]"
+  $ fab dryrun recipe.run:foobar.example.com,"role[install]"
   ```
 
-* Execute command with specified Knife config.
+* Specify knife config.
   ```
   $ fab conf:foobar/.chef/knife.rb env.list
   ```
 
-* Output command execution result in JSON format.
+* Specify output format os json.(Available table, text and json)
   ```
   $ fab output:json env.list
   ```
 
-* Using some options.
+* Combining some options.
   ```
-  $ fab conf:foobar/.chef/knife.rb output:json chefenv:prod_kks node.list
+  $ fab conf:foobar/.chef/knife.rb output:json node.list:prod
   ```
 
 ### Available Tasks
@@ -91,10 +86,9 @@ $ fab -l
 
 Available commands:
 
-    chefenv        Specify Environment for current use.(Default dev)
     conf           Specify path of Knife config file.(Default ./chef/knife.rb...
     dryrun         Enable Dry-Run mode. Do NOT update anything.
-    output         Specify output format. (text|json) (Default text)
+    output         Specify output format. (table|text|json) (Default table)
     databag.apply  Create DataBag item. (and grant admin permission)
     databag.list   List all DataBag items.
     databag.show   Show DataBag item.
@@ -102,7 +96,7 @@ Available commands:
     env.list       List all Environments in Organization.
     env.show       Show current Environment.
     node.add       Add Node to current Environment.
-    node.list      List Nodes in current Environment.
+    node.list      List Nodes in specified Environment.
     node.show      Show Node.
     recipe.run     Run recipe(s) on specified node.
     role.apply     Create or Update Role(s) from specified path(dir or file).
@@ -119,23 +113,23 @@ Displaying detailed information for task 'node.add':
 
     Example)
       Add node with same name as host in Environment prod_ssk.
-      $ fab chefenv:prod_ssk add_node:foobar.example.com
+      $ fab add_node:prod,foobar.example.com
 
       Add node with specified name in Environment prod_ssk.
-      $ fab chefenv:prod_ssk add_node:foobar.example.com,foobar
+      $ fab add_node:prod,foobar.example.com,foobar
 
       Add node with same name as host in Environment prod_ssk, and  grant access to DataBag items*_prod.
-      $ fab chefenv:prod_ssk add_node:foobar.example.com,None,".*_prod"
+      $ fab add_node:prod,foobar.example.com,None,".*_prod"
 
+    :param chef_env: Add to Chef Environment.
     :param host_name: Host name of node to be added.
     :param node_name: Node name. Use host name if specified None.  (Default Use host_name as node name)
     :param accessible_databag_item_patterns: DataBag item(s) accessed from added node.(Can use regex) (Default nothing)
 
-    Arguments: host_name, node_name=None
+    Arguments: chef_env, host_name, node_name=None
 ```
   
 ## API
 
 TBD
 
-  

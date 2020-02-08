@@ -2,9 +2,12 @@
 
 from __future__ import print_function
 
-from fabric.colors import green
+from fabric.colors import green, blue
 
 from fabricchef.api import *
+
+import json
+from prettytable import PrettyTable
 
 
 def parse_databag_item_name(databag_item_name):
@@ -22,11 +25,11 @@ def format_databag_item_name(databag_name, item_name):
 
 
 def get_exists_databag_item_names():
-    # vault list がJSON出力をサポートしていないのでテキストを改行で切ってます
+    # Parsing text response because 'value list' does not supports output as json format.
     exists_databag_item_names = []
-    databag_names = knife('vault list', 'text', capture=True, always_run=True).split('\n')
+    databag_names = knife('vault list', always_run=True)('text').split('\n')
     for databag_name in databag_names:
-        databag_item_names = knife('vault show %s' % databag_name, 'text', capture=True, always_run=True).split('\n')
+        databag_item_names = knife('vault show %s' % databag_name, always_run=True)('text').split('\n')
         for databag_item_name in databag_item_names:
             exists_databag_item_names.append(format_databag_item_name(databag_name, databag_item_name))
     return exists_databag_item_names
@@ -44,6 +47,14 @@ def list():
             print("  \"%s\"," % i)
         print("  \"%s\"" % databag_item_names[-1])
         print("]")
+    elif env.OutputFormat == 'table':
+        print(blue("DataBag items:"))
+        table = PrettyTable(["Name"])
+        table.align["Name"] = 'l'
+        for i in databag_item_names:
+            table.add_row([i])
+        print(table)
+        print("%s DataBag item(s)" % len(databag_item_names))
     else:
         for i in databag_item_names:
             print(i)
@@ -57,7 +68,31 @@ def show(databag_item_name):
     :param databag_item_name: DataBag name. Like a foo.bar.
     """
     (databag_name, item_name) = parse_databag_item_name(databag_item_name)
-    knife('vault show %s %s -p all' % (databag_name, item_name), always_run=True)
+
+    def print_table(knife_output):
+        j = json.loads(knife_output)
+
+        print(blue("DataBag item:"))
+        table1 = PrettyTable()
+        table1.add_column("Name", "%s %s" % (databag_name, [j['id']]), 'l')
+        table1.add_column("Admins", [", ".join(j['admins'])], 'l')
+        print(table1)
+
+        print(blue("Clients:"))
+        table2 = PrettyTable(["Client"])
+        table2.align["Client"] = 'l'
+        for i in j['clients']:
+            table2.add_row(i)
+        print(table2)
+
+        print(blue("Values:"))
+        del j['id'], j['admins'], j['clients'], j['search_query']
+        print(json.dumps(j, indent=2, sort_keys=True))
+
+    printf(
+        knife('vault show %s %s -p all' % (databag_name, item_name), always_run=True),
+        ('json', print_table)
+    )
 
 
 # TODO Upsertにしたい
@@ -76,11 +111,15 @@ def apply(databag_item_name, item_value, *admins):
     """
     (databag_name, item_name) = parse_databag_item_name(databag_item_name)
     print(green("Creating DataBag item %s %s..." % (databag_name, item_name)))
-    knife('vault create %s %s \'%s\'' % (databag_name, item_name, item_value))
+    printt(
+        knife('vault create %s %s \'%s\'' % (databag_name, item_name, item_value))
+    )
 
     if admins:
         admins_str = ','.join(str(s) for s in admins)
-        print(green("Grant administration permission to %s..." % (admins_str)))
-        knife('vault update %s %s -A "%s" -M client' % (databag_name, item_name, admins_str))
+        print(green("Grant administration permission to %s..." % admins_str))
+        printt(
+            knife('vault update %s %s -A "%s" -M client' % (databag_name, item_name, admins_str))
+        )
 
     show(databag_item_name)

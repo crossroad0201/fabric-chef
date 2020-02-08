@@ -13,6 +13,7 @@ setup(
   keywords         = 'fabric chef',
   packages         = find_packages(),
   install_requires = [
-    'fabric<2.0'
+    'fabric<2.0',
+    'prettytable'
   ]
 )
