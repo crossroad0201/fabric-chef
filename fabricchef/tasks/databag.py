@@ -52,7 +52,7 @@ def list():
         table = PrettyTable(["Name"])
         table.align["Name"] = 'l'
         for i in databag_item_names:
-            table.add_row(i)
+            table.add_row([i])
         print(table)
         print("%s DataBag item(s)" % len(databag_item_names))
     else:
