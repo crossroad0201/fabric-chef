@@ -33,7 +33,39 @@ def list():
     )
 
 
-# TODO Supports show
+@task
+def show(role_name):
+    """
+    Show Role.
+
+    :param role_name: Role name.
+    """
+    def print_table(knife_output):
+        j = json.loads(knife_output)
+
+        print(blue("Role:", bold=True))
+        table1 = PrettyTable()
+        table1.add_column("Name", [j['name']], 'l')
+        table1.add_column("Description", [j['description']], 'l')
+        print(table1)
+
+        print(blue("RunList:", bold=True))
+        table2 = PrettyTable(["RunList"])
+        table2.align["RunList"] = 'l'
+        for i in sorted(j['run_list']):
+            table2.add_row([i])
+        print("%s RunList(s)" % len(j['run_list']))
+
+        print(blue("Default attributes:", bold=True))
+        print_dict_as_flat_table(j['default_attributes'])
+
+        print(blue("Override attributes:", bold=True))
+        print_dict_as_flat_table(j['override_attributes'])
+
+    printf(
+        knife('role show %s' % role_name, always_run=True),
+        as_table=('json', print_table)
+    )
 
 
 @task
