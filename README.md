@@ -17,6 +17,24 @@ Useful [Fabric](http://www.fabfile.org/installing-1.x.html) tasks for
 $ pip install git+https://github.com/crossroad0201/fabric-chef.git [-U]
 ```
 
+## Recommended directory structure
+
+```
+/[Your Chef repository]
+  +- /.chef
+  |    +- knife.rb
+  |    +- [Your private key].pem
+  +- /environments
+  |    +- dev.json
+  |    +- prod.json
+  |    :
+  +- /roles
+  |    +- deploy.json
+  |    +- restart.json
+  |    :
+  +- fabfile.py
+```
+
 ## Create fabfile.py
 
 ```python
@@ -34,6 +52,11 @@ import fabricchef.tasks.role as role
 import fabricchef.tasks.databag as databag
 import fabricchef.tasks.node as node
 import fabricchef.tasks.recipe as recipe
+
+# You can add any custom tasks for this Chef repository. 
+@task
+def custom_task():
+  print('Hello.')
 ```
 
 ## Run
