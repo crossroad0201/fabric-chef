@@ -61,7 +61,7 @@ def show(chef_env):
         table3 = PrettyTable(["Key", "Value"])
         table3.align["Key"] = 'l'
         table3.align["Value"] = 'l'
-        for key, value in flatten(j['default_attributes'], '.').items():
+        for key, value in sorted(flatten(j['default_attributes'], '.').items()):
             table3.add_row([key, value])
         print(table3)
 
@@ -69,7 +69,7 @@ def show(chef_env):
         table4 = PrettyTable(["Key", "Value"])
         table4.align["Key"] = 'l'
         table4.align["Value"] = 'l'
-        for key, value in flatten(j['override_attributes'], '.').items():
+        for key, value in sorted(flatten(j['override_attributes'], '.').items()):
             table4.add_row([key, value])
         print(table4)
 
