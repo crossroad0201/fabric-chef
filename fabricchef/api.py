@@ -32,7 +32,7 @@ def knife(command_and_option, always_run=False):
 
 def shorten(value, slen, elen):
     if value:
-        s = str(value)
+        s = value if type(value) == unicode else str(value) 
         if len(s) <= (slen + elen):
             return s
         else:
@@ -47,7 +47,7 @@ def shorten(value, slen, elen):
 
 
 def print_dict_as_flat_table(knife_output):
-    j = json.loads(knife_output)
+    j = json.loads(knife_output, encoding='utf8')
     table = PrettyTable(["Key", "Value"])
     table.align["Key"] = 'l'
     table.align["Value"] = 'l'
