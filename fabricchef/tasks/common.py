@@ -30,17 +30,6 @@ def output(output_format='text'):
 
 
 @task
-def chefenv(chef_env):
-    """
-    Specify Environment for current use.(Default dev)
-
-    :param chef_env: Environment.
-    """
-    env.ChefEnv = chef_env
-    print(yellow("Set current Chef Environment to %s." % env.ChefEnv))
-
-
-@task
 def dryrun():
     """
     Enable Dry-Run mode. Do NOT update anything.

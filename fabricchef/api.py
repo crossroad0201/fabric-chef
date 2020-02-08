@@ -6,8 +6,7 @@ from fabric.api import *
 from fabric.colors import red
 
 env.KnifeConfPath = None
-env.OutputFormat = 'text'
-env.ChefEnv = 'dev'
+env.OutputFormat = 'text'  # FIXME デフォルトをtableに
 env.RryRun = False
 
 

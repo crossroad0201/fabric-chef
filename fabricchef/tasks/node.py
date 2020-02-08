@@ -15,9 +15,11 @@ from prettytable import PrettyTable
 
 
 @task
-def list():
+def list(chef_env):
     """
-    List Nodes in current Environment.
+    List Nodes in specified Environment.
+
+    :param chef_env: Chef Environment.
     """
     def print_to_table(result):
         j = json.loads(result)
@@ -45,7 +47,7 @@ def list():
         print("%s Node(s)" % len(j))
 
     printf(
-        knife3('search node "chef_environment:%s"' % env.ChefEnv, always_run=True),
+        knife3('search node "chef_environment:%s"' % chef_env, always_run=True),
         print_to_table
     )
 
@@ -111,31 +113,32 @@ def show(node_name, show_all_attrs='False'):
 
 
 @task
-def add(host_name, node_name=None, *accessible_databag_item_patterns):
+def add(chef_env, host_name, node_name=None, *accessible_databag_item_patterns):
     """
     Add Node to current Environment.
 
     Example)
       Add node with same name as host in Environment prod.
-      $ fab chefenv:prod node.add:foobar.example.com
+      $ fab node.add:prod,foobar.example.com
 
       Add node with specified name in Environment prod.
-      $ fab chefenv:prod node.add:foobar.example.com,foobar
+      $ fab node.add:prod,foobar.example.com,foobar
 
       Add node with same name as host in Environment prod, and  grant access to DataBag items*_prod.
-      $ fab chefenv:prod node.add:foobar.example.com,None,".*_prod"
+      $ fab node.add:prod,foobar.example.com,None,".*_prod"
 
+    :param chef_env: Add to Chef Environment.
     :param host_name: Host name of node to be added.
     :param node_name: Node name. Use host name if specified None.  (Default Use host_name as node name)
     :param accessible_databag_item_patterns: DataBag item(s) accessed from added node.(Can use regex) (Default nothing)
     """
     _node_name = node_name if node_name and node_name != 'None' else host_name
 
-    print(green("Adding Node %s(Host=%s) in Environment %s..." % (_node_name, host_name, env.ChefEnv)))
+    print(green("Adding Node %s(Host=%s) in Environment %s..." % (_node_name, host_name, chef_env)))
     printt(
         knife3(
             'bootstrap %s --sudo --ssh-user=`whoami` --node-name=%s --environment=%s' %
-            (host_name, _node_name, env.ChefEnv)
+            (host_name, _node_name, chef_env)
         )
     )
 

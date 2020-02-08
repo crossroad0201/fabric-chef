@@ -33,9 +33,11 @@ def list():
 
 
 @task
-def show():
+def show(chef_env):
     """
     Show current Environment.
+
+    :param chef_env: Chef Environment.
     """
     def print_to_table(result):
         j = json.loads(result)
@@ -61,7 +63,7 @@ def show():
         print(json.dumps(j['override_attributes'], indent=2, sort_keys=True))
 
     printf(
-        knife3('environment show %s' % env.ChefEnv, always_run=True),
+        knife3('environment show %s' % chef_env, always_run=True),
         print_to_table
     )
 
