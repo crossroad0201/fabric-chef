@@ -15,20 +15,20 @@ def list():
     """
     List all Roles in Organization.
     """
-    def print_to_table(result):
-        j = json.loads(result)
+    def print_table(knife_output):
+        j = json.loads(knife_output)
 
         print(blue("Roles:", bold=True))
         table = PrettyTable(["Name"])
-        table.align['Name'] = 'l'
+        table.align["Name"] = 'l'
         for i in j:
             table.add_row([i])
         print(table)
         print("%s Role(s)" % len(j))
 
     printf(
-        knife3('role list', always_run=True),
-        print_to_table
+        knife('role list', always_run=True),
+        ('json', print_table)
     )
 
 

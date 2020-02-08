@@ -21,8 +21,8 @@ def list(chef_env):
 
     :param chef_env: Chef Environment.
     """
-    def print_to_table(result):
-        j = json.loads(result)
+    def print_table(kinfe_output):
+        j = json.loads(kinfe_output)
 
         table = PrettyTable(["NodeName", "Platform", "FQDN", "IP Address", "Uptime", "Environment", "RunList"])
         table.align["NodeName"] = 'l'
@@ -47,8 +47,8 @@ def list(chef_env):
         print("%s Node(s)" % len(j))
 
     printf(
-        knife3('search node "chef_environment:%s"' % chef_env, always_run=True),
-        print_to_table
+        knife('search node "chef_environment:%s"' % chef_env, always_run=True),
+        ('json', print_table)
     )
 
 
@@ -60,8 +60,8 @@ def show(node_name, show_all_attrs='False'):
     :param node_name: Node name.
     :param show_all_attrs: Show all attributes.(True|False) (Default False)
     """
-    def print_all_to_table(result):
-        j = json.loads(result)
+    def print_table_all(knife_output):
+        j = json.loads(knife_output)
         a = j['automatic']
 
         print(blue("Node:", bold=True))
@@ -90,8 +90,8 @@ def show(node_name, show_all_attrs='False'):
                           )], 'r')
         print(table2)
 
-    def print_to_table(result):
-        j = json.loads(result)
+    def print_table(knife_output):
+        j = json.loads(knife_output)
 
         print(blue("Node:", bold=True))
         table = PrettyTable()
@@ -102,13 +102,13 @@ def show(node_name, show_all_attrs='False'):
 
     if show_all_attrs in ('True', 'true', 'yes'):
         printf(
-            knife3('node show %s -l' % node_name, always_run=True),
-            print_all_to_table
+            knife('node show %s -l' % node_name, always_run=True),
+            ('json', print_table_all)
         )
     else:
         printf(
-            knife3('node show %s' % node_name, always_run=True),
-            print_to_table
+            knife('node show %s' % node_name, always_run=True),
+            ('json', print_table)
         )
 
 
@@ -136,7 +136,7 @@ def add(chef_env, host_name, node_name=None, *accessible_databag_item_patterns):
 
     print(green("Adding Node %s(Host=%s) in Environment %s..." % (_node_name, host_name, chef_env)))
     printt(
-        knife3(
+        knife(
             'bootstrap %s --sudo --ssh-user=`whoami` --node-name=%s --environment=%s' %
             (host_name, _node_name, chef_env)
         )
@@ -155,7 +155,7 @@ def add(chef_env, host_name, node_name=None, *accessible_databag_item_patterns):
             for i in databag_item_names_tobe_access:
                 print(green("Grant access to DataBag item %s..." % i))
                 (databag_name, item_name) = parse_databag_item_name(i)
-                printt(knife3('vault update %s %s -C "%s"' % (databag_name, item_name, _node_name)))
+                printt(knife('vault update %s %s -C "%s"' % (databag_name, item_name, _node_name)))
         else:
             print(yellow(
                 "No DataBag item matches the specified pattern %s." %

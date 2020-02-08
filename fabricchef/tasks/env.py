@@ -15,7 +15,7 @@ def list():
     """
     List all Environments in Organization.
     """
-    def print_to_table(result):
+    def print_table(result):
         j = json.loads(result)
 
         print(blue("Environments:", bold=True))
@@ -27,8 +27,8 @@ def list():
         print("%s Environment(s)" % len(j))
 
     printf(
-        knife3('environment list', always_run=True),
-        print_to_table
+        knife('environment list', always_run=True),
+        ('json', print_table)
     )
 
 
@@ -39,8 +39,8 @@ def show(chef_env):
 
     :param chef_env: Chef Environment.
     """
-    def print_to_table(result):
-        j = json.loads(result)
+    def print_table(knife_output):
+        j = json.loads(knife_output)
 
         print(blue("Environment:", bold=True))
         table1 = PrettyTable()
@@ -56,6 +56,7 @@ def show(chef_env):
             table2.add_row([name, version])
         print(table2)
 
+        # TODO flatten to table
         print(blue("Default attributes:", bold=True))
         print(json.dumps(j['default_attributes'], indent=2, sort_keys=True))
 
@@ -63,8 +64,8 @@ def show(chef_env):
         print(json.dumps(j['override_attributes'], indent=2, sort_keys=True))
 
     printf(
-        knife3('environment show %s' % chef_env, always_run=True),
-        print_to_table
+        knife('environment show %s' % chef_env, always_run=True),
+        ('json', print_table)
     )
 
 
@@ -78,7 +79,7 @@ def apply(env_path='./environments/*'):
     """
     print(green('Creating or updating Environment(s) from %s...' % env_path))
     printt(
-        knife3('knife environment from file %s' % env_path)
+        knife('knife environment from file %s' % env_path)
     )
 
     list()

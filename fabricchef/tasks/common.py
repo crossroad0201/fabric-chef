@@ -12,17 +12,16 @@ def conf(knife_conf_path='./.chef/knife.rb'):
     """
     Specify path of Knife config file.(Default ./chef/knife.rb)
 
-    :param knife_conf_path: Kinife config file path.
+    :param knife_conf_path: knife config file path.
     """
     env.KnifeConfPath = knife_conf_path
     print(yellow("Using Knife configuration file %s." % env.KnifeConfPath))
 
 
-# TODO Supports table layout.
 @task
-def output(output_format='text'):
+def output(output_format):
     """
-    Specify output format. (text|json) (Default text)
+    Specify output format. (table|text|json) (Default table)
 
     :param output_format: Output format.
     """
