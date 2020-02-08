@@ -2,8 +2,12 @@
 
 from __future__ import print_function
 
+import json
+
 from fabric.api import *
 from fabric.colors import red
+from flatten_json import flatten
+from prettytable import PrettyTable
 
 env.KnifeConfPath = None
 env.OutputFormat = 'table'
@@ -26,12 +30,30 @@ def knife(command_and_option, always_run=False):
     return fn_knife
 
 
-def printf(fn_knife, as_table, as_text=('text', lambda s: print(s)), as_json=('json', lambda s: print(s))):
+def print_dict_as_flat_table(knife_output):
+    j = json.loads(knife_output)
+    table = PrettyTable(["Key", "Value"])
+    table.align["Key"] = 'l'
+    table.align["Value"] = 'l'
+    for key, value in sorted(flatten(j, '.').items()):
+        table.add_row([key, value])
+    print(table)
+    print("%s item(s)" % len(j))
+
+
+def printf(fn_knife,
+           as_table,
+           as_text=('text', lambda s: print(s)),
+           as_json=('json', lambda s: print(s)),
+           as_flat=('json', print_dict_as_flat_table)
+           ):
     def decorator_for(output_format):
         if output_format == 'json':
             return as_json[0], as_json[1]
         elif output_format == 'table':
             return as_table[0], as_table[1]
+        elif output_format == 'flat':
+            return as_flat[0], as_flat[1]
         else:
             return as_text[0], as_text[1]
 

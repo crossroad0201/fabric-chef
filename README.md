@@ -121,7 +121,7 @@ $ fab env.list
   $ fab conf:foobar/.chef/knife.rb env.list
   ```
 
-* Specify output format os json.(Available table, text and json)
+* Specify output format os json.(Available table, text, json and flat)
   ```
   $ fab output:json env.list
   ```
@@ -142,7 +142,7 @@ Available commands:
 
     conf           Specify path of Knife config file.(Default ./chef/knife.rb...
     dryrun         Enable Dry-Run mode. Do NOT update anything.
-    output         Specify output format. (table|text|json) (Default table)
+    output         Specify output format. (table|text|json|flat) (Default table)
     databag.apply  Create DataBag item. (and grant admin permission)
     databag.list   List all DataBag items.
     databag.show   Show DataBag item.

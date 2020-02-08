@@ -21,7 +21,7 @@ def conf(knife_conf_path='./.chef/knife.rb'):
 @task
 def output(output_format):
     """
-    Specify output format. (table|text|json) (Default table)
+    Specify output format. (table|text|json|flat) (Default table)
 
     :param output_format: Output format.
     """
