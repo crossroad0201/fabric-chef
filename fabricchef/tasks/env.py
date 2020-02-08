@@ -30,7 +30,7 @@ def list():
     printf(
         knife('environment list', always_run=True),
         ('json', print_table),
-        as_flat=('json', lambda x: print_dict_as_flat_table("{\"_\":%s}" % x))
+        as_flat=('json', lambda x: print_dict_as_flat_table({"_": json.loads(x)}))
     )
 
 

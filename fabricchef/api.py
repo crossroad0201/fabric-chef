@@ -46,15 +46,14 @@ def shorten(value, slen, elen):
         return value
 
 
-def print_dict_as_flat_table(knife_output):
-    j = json.loads(knife_output, encoding='utf8')
+def print_dict_as_flat_table(dict_value):
     table = PrettyTable(["Key", "Value"])
     table.align["Key"] = 'l'
     table.align["Value"] = 'l'
-    for key, value in sorted(flatten(j, '.').items()):
+    for key, value in sorted(flatten(dict_value, '.').items()):
         table.add_row([shorten(key, 95, 5), shorten(value, 95, 5)])
     print(table)
-    print("%s item(s)" % len(j))
+    print("%s item(s)" % len(dict_value))
 
 
 def printf(fn_knife,

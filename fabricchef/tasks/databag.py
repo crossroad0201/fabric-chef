@@ -56,9 +56,7 @@ def list():
         print(table)
         print("%s DataBag item(s)" % len(databag_item_names))
     elif env.OutputFormat == 'flat':
-        print_dict_as_flat_table(
-            "{\"_\":[%s]}" % ",".join(map(lambda x: "\"%s\"" % x, databag_item_names))
-        )
+        print_dict_as_flat_table({"_": databag_item_names})
     else:
         for i in databag_item_names:
             print(i)
