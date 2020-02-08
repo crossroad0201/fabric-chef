@@ -24,7 +24,7 @@ $ pip install git+https://github.com/crossroad0201/fabric-chef.git [-U]
 
 from __future__ import print_function
 
-# Import required fabchef members. (Must be use from-import syntax.)
+# Import required fabric-chef members. (Must be use from-import syntax.)
 from fabricchef.api import *
 from fabricchef.tasks.common import *
 
@@ -45,39 +45,34 @@ $ fab env.list
 
 # Usage
 
-### Run Fabric Tasks 
+### Basic usage
 
 * Execute single command. 
   ```
   $ fab env.list
   ```
 
-* Execute multiple commands.(Sequential)
+* Execute multiple commands.(Execute sequentially)
   ```
   $ fab env.list databag.list
   ```
 
-* Execute command with specified Chef Envitonment.
-  ```
-  $ fab env.show:prod
-  ```
-
-* Execute command in DRY-RUN mode.
+* Dry-Run.
   ```
   $ fab dryrun recipe.run:foobar.example.com,"role[install]"
   ```
 
-* Execute command with specified Knife config.
+* Specify knife config.
   ```
   $ fab conf:foobar/.chef/knife.rb env.list
   ```
 
-* Output command execution result in JSON format.
+* Specify output format os json.(Available table, text and json)
   ```
   $ fab output:json env.list
   ```
 
-* Using some options.
+* Combining some options.
   ```
   $ fab conf:foobar/.chef/knife.rb output:json node.list:prod
   ```
@@ -93,7 +88,7 @@ Available commands:
 
     conf           Specify path of Knife config file.(Default ./chef/knife.rb...
     dryrun         Enable Dry-Run mode. Do NOT update anything.
-    output         Specify output format. (text|json) (Default text)
+    output         Specify output format. (table|text|json) (Default table)
     databag.apply  Create DataBag item. (and grant admin permission)
     databag.list   List all DataBag items.
     databag.show   Show DataBag item.
@@ -101,7 +96,7 @@ Available commands:
     env.list       List all Environments in Organization.
     env.show       Show current Environment.
     node.add       Add Node to current Environment.
-    node.list      List Nodes in current Environment.
+    node.list      List Nodes in specified Environment.
     node.show      Show Node.
     recipe.run     Run recipe(s) on specified node.
     role.apply     Create or Update Role(s) from specified path(dir or file).
@@ -138,4 +133,3 @@ Displaying detailed information for task 'node.add':
 
 TBD
 
-  
