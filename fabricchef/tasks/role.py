@@ -54,6 +54,7 @@ def show(role_name):
         table2.align["RunList"] = 'l'
         for i in sorted(j['run_list']):
             table2.add_row([i])
+        print(table2)
         print("%s RunList(s)" % len(j['run_list']))
 
         print(blue("Default attributes:", bold=True))
