@@ -8,6 +8,7 @@ from fabricchef.api import *
 
 import json
 from prettytable import PrettyTable
+from flatten_json import flatten
 
 
 @task
@@ -56,12 +57,21 @@ def show(chef_env):
             table2.add_row([name, version])
         print(table2)
 
-        # TODO flatten to table
         print(blue("Default attributes:", bold=True))
-        print(json.dumps(j['default_attributes'], indent=2, sort_keys=True))
+        table3 = PrettyTable(["Key", "Value"])
+        table3.align["Key"] = 'l'
+        table3.align["Value"] = 'l'
+        for key, value in flatten(j['default_attributes'], '.').items():
+            table3.add_row([key, value])
+        print(table3)
 
         print(blue("Override attributes:", bold=True))
-        print(json.dumps(j['override_attributes'], indent=2, sort_keys=True))
+        table4 = PrettyTable(["Key", "Value"])
+        table4.align["Key"] = 'l'
+        table4.align["Value"] = 'l'
+        for key, value in flatten(j['override_attributes'], '.').items():
+            table4.add_row([key, value])
+        print(table4)
 
     printf(
         knife('environment show %s' % chef_env, always_run=True),

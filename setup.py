@@ -14,6 +14,7 @@ setup(
   packages         = find_packages(),
   install_requires = [
     'fabric<2.0',
-    'prettytable'
+    'prettytable',
+    'flatten_json'
   ]
 )
