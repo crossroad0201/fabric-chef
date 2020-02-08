@@ -30,8 +30,9 @@ def knife(command_and_option, always_run=False):
     return fn_knife
 
 
-def shorten(s, slen, elen):
-    if s:
+def shorten(value, slen, elen):
+    if value:
+        s = str(value)
         if len(s) <= (slen + elen):
             return s
         else:
@@ -42,7 +43,7 @@ def shorten(s, slen, elen):
             else:
                 return '%s..%s' % (s[0:slen - 1], s[len(s) - elen + 1:len(s)])
     else:
-        return s
+        return value
 
 
 def print_dict_as_flat_table(knife_output, key_max_len=-1, value_max_len=100):
