@@ -55,6 +55,8 @@ def list():
             table.add_row([i])
         print(table)
         print("%s DataBag item(s)" % len(databag_item_names))
+    elif env.OutputFormat == 'flat':
+        print_dict_as_flat_table(databag_item_names)
     else:
         for i in databag_item_names:
             print(i)
