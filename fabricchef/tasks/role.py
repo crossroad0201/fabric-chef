@@ -50,10 +50,13 @@ def show(role_name):
         print(table1)
 
         print(blue("RunList:", bold=True))
-        table2 = PrettyTable(["RunList"])
+        table2 = PrettyTable(["Position", "RunList"])
+        table2.align["Position"] = 'r'
         table2.align["RunList"] = 'l'
-        for i in sorted(j['run_list']):
-            table2.add_row([i])
+        position = 0
+        for i in j['run_list']:
+            table2.add_row([position, i])
+            position += 1
         print(table2)
         print("%s RunList(s)" % len(j['run_list']))
 
