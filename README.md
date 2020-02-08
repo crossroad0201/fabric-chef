@@ -4,6 +4,37 @@ Fabric Chef
 Useful [Fabric](http://www.fabfile.org/installing-1.x.html) tasks for
 [Chef](https://www.chef.io/) operations.
 
+```
+$ fab node.list:prod
+[localhost] local: knife search node "chef_environment:prod" -F json
++-----------------+------------------+-----------------+-----------------+---------------------------------------+-------------+---------+
+| NodeName        | Platform         | FQDN            | IP Address      | Uptime                                | Environment | RunList |
++-----------------+------------------+-----------------+-----------------+---------------------------------------+-------------+---------+
+| foo.example.com | centos(7.6.1810) | foo.example.com | ***.***.***.*** | 4 hours 22 minutes 57 seconds         | prod        | []      |
+| bar.example.com | centos(7.6.1810) | bar.example.com | ***.***.***.*** | 7 days 00 hours 34 minutes 23 seconds | prod        | []      |
++-----------------+------------------+-----------------+-----------------+---------------------------------------+-------------+---------+
+2 Node(s)
+
+Done.
+
+$ fab node.show:foo.example.com,show_all_attrs=True
+[localhost] local: knife node show foo.example.com -l -F json
+Node:
++-----------------+------------------+-----------------+-----------------+-------------------------------+-------------+---------+
+| NodeName        | Platform         | FQDN            | IP Address      | Uptime                        | Environment | RunList |
++-----------------+------------------+-----------------+-----------------+-------------------------------+-------------+---------+
+| foo.example.com | centos(7.6.1810) | foo.example.com | ***.***.***.*** | 4 hours 22 minutes 57 seconds | prod        | []      |
++-----------------+------------------+-----------------+-----------------+-------------------------------+-------------+---------+
+Device:
++-----------+-----------------------+----------------------+
+| CPU Cores |     Memory Free/Total | Disk Free/Total (KB) |
++-----------+-----------------------+----------------------+
+|         4 | 5108128kB / 6109324kB |  17788140 / 20959212 |
++-----------+-----------------------+----------------------+
+
+Done.
+```
+
 # Requirement
 
 * Python 2.7.x (Do NOT support Python 3.x)
