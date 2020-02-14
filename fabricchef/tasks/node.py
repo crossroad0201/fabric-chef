@@ -15,11 +15,11 @@ from prettytable import PrettyTable
 
 
 @task
-def list(chef_env):
+def list(chef_env=None):
     """
     List Nodes in specified Environment.
 
-    :param chef_env: Chef Environment.
+    :param chef_env: Chef Environment.(Default all environments)
     """
     def print_table(kinfe_output):
         j = json.loads(kinfe_output)
@@ -46,8 +46,9 @@ def list(chef_env):
         print(table)
         print("%s Node(s)" % len(j))
 
+    query = '"chef_environment:%s"' % chef_env if chef_env else ''
     printf(
-        knife('search node "chef_environment:%s"' % chef_env, always_run=True),
+        knife('search node %s' % query, always_run=True),
         ('json', print_table)
     )
 
