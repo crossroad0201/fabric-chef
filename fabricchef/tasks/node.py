@@ -21,8 +21,8 @@ def list(chef_env=None):
 
     :param chef_env: Chef Environment.(Default all environments)
     """
-    def print_table(kinfe_output):
-        j = json.loads(kinfe_output)
+    def print_table(knife_output):
+        j = json.loads(knife_output)
 
         table = PrettyTable(["NodeName", "Platform", "FQDN", "IP Address", "Uptime", "Environment", "RunList"])
         table.align["NodeName"] = 'l'
