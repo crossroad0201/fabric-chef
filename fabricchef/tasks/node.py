@@ -14,6 +14,7 @@ import json
 from prettytable import PrettyTable
 
 
+# TODO Show Last Check-in.
 @task
 def list(chef_env=None):
     """
