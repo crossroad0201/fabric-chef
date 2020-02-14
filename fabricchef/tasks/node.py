@@ -32,7 +32,7 @@ def list(chef_env=None):
         table.align["Uptime"] = 'l'
         table.align["Environment"] = 'l'
         table.align["RunList"] = 'l'
-        for i in j['rows']:
+        for i in sorted(j['rows'], key=lambda x: x['name']):
             a = i['automatic']
             table.add_row([
                 i['name'],

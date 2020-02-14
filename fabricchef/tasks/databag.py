@@ -28,9 +28,9 @@ def get_exists_databag_item_names():
     # Parsing text response because 'value list' does not supports output as json format.
     exists_databag_item_names = []
     databag_names = knife('vault list', always_run=True)('text').split('\n')
-    for databag_name in databag_names:
+    for databag_name in sorted(databag_names):
         databag_item_names = knife('vault show %s' % databag_name, always_run=True)('text').split('\n')
-        for databag_item_name in databag_item_names:
+        for databag_item_name in sorted(databag_item_names):
             exists_databag_item_names.append(format_databag_item_name(databag_name, databag_item_name))
     return exists_databag_item_names
 

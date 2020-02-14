@@ -22,7 +22,7 @@ def list():
         print(blue("Environments:", bold=True))
         table = PrettyTable(["Name"])
         table.align["Name"] = 'l'
-        for i in j:
+        for i in sorted(j):
             table.add_row([i])
         print(table)
         print("%s Environment(s)" % len(j))
