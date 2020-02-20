@@ -45,7 +45,7 @@ def list(chef_env=None):
                 i['run_list']
             ])
         print(table)
-        print("%s Node(s)" % len(j))
+        print("%s Node(s)" % len(j['rows']))
 
     query = '"chef_environment:%s"' % chef_env if chef_env else ''
     printf(
