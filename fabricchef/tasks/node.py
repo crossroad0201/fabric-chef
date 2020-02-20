@@ -25,13 +25,14 @@ def list(chef_env=None):
     def print_table(knife_output):
         j = json.loads(knife_output)
 
-        table = PrettyTable(["NodeName", "Platform", "FQDN", "IP Address", "Uptime", "Environment", "RunList"])
+        table = PrettyTable(["NodeName", "Platform", "FQDN", "IP Address", "Uptime", "Environment", "Tag", "RunList"])
         table.align["NodeName"] = 'l'
         table.align["Platform"] = 'l'
         table.align["FQDN"] = 'l'
         table.align["IP Address"] = 'l'
         table.align["Uptime"] = 'l'
         table.align["Environment"] = 'l'
+        table.align["Tag"] = 'l'
         table.align["RunList"] = 'l'
         for i in sorted(j['rows'], key=lambda x: x['name']):
             a = i['automatic']
@@ -42,7 +43,8 @@ def list(chef_env=None):
                 a['ipaddress'],
                 a['uptime'],
                 i['chef_environment'],
-                i['run_list']
+                ",".join(i['normal']['tags']),
+                ",".join(i['run_list'])
             ])
         print(table)
         print("%s Node(s)" % len(j['rows']))
@@ -55,14 +57,13 @@ def list(chef_env=None):
 
 
 @task
-def show(node_name, show_all_attrs='False'):
+def show(node_name):
     """
     Show Node.
 
     :param node_name: Node name.
-    :param show_all_attrs: Show all attributes.(True|False) (Default False)
     """
-    def print_table_all(knife_output):
+    def print_table(knife_output):
         j = json.loads(knife_output)
         a = j['automatic']
 
@@ -74,7 +75,8 @@ def show(node_name, show_all_attrs='False'):
         table1.add_column("IP Address", [a['ipaddress']], 'l')
         table1.add_column("Uptime", [a['uptime']], 'l')
         table1.add_column("Environment", [j['chef_environment']], 'l')
-        table1.add_column("RunList", [j['run_list']], 'l')
+        table1.add_column("Tag", [",".join(j['normal']['tags'])], 'l')
+        table1.add_column("RunList", [",".join(j['run_list'])], 'l')
         print(table1)
 
         print(blue("Device:", bold=True))
@@ -92,26 +94,10 @@ def show(node_name, show_all_attrs='False'):
                           )], 'r')
         print(table2)
 
-    def print_table(knife_output):
-        j = json.loads(knife_output)
-
-        print(blue("Node:", bold=True))
-        table = PrettyTable()
-        table.add_column("NodeName", [j['name']], 'l')
-        table.add_column("Environment", [j['chef_environment']], 'l')
-        table.add_column("RunList", [j['run_list']], 'l')
-        print(table)
-
-    if show_all_attrs in ('True', 'true', 'yes'):
-        printf(
-            knife('node show %s -l' % node_name, always_run=True),
-            ('json', print_table_all)
-        )
-    else:
-        printf(
-            knife('node show %s' % node_name, always_run=True),
-            ('json', print_table)
-        )
+    printf(
+        knife('node show %s -l' % node_name, always_run=True),
+        ('json', print_table)
+    )
 
 
 @task
