@@ -8,7 +8,7 @@ import re
 from fabric.colors import green, blue, yellow
 
 from fabricchef.api import *
-from fabricchef.tasks.databag import get_exists_databag_item_names, parse_databag_item_name
+from fabricchef.tasks.vault import get_exists_vault_item_names, parse_vault_item_name
 
 import json
 from prettytable import PrettyTable
@@ -126,14 +126,14 @@ def add(chef_env, host_name, node_name=None, **kwargs):
       Add node with specified name in Environment prod.
       $ fab node.add:prod,foobar.example.com,foobar
 
-      Grant access to DataBag items '*_prod', and create tag 'foo' and 'bar'.
-      $ fab node.add:prod,foobar.example.com,None,databags=".*_prod",tags="foo,bar"
+      Grant access to Vault items '*_prod', and create tag 'foo' and 'bar'.
+      $ fab node.add:prod,foobar.example.com,None,vaults=".*_prod",tags="foo,bar"
 
     :param chef_env: Add to Chef Environment.
     :param host_name: Host name of node to be added.
     :param node_name: Node name. Use host name if specified None.  (Default Use host_name as node name)
     :param kwargs: Options.
-        databags - DataBag item(s) accessed.(Can use regex)
+        vaults - Vault item(s) accessed.(Can use regex)
         tags     - Tags.
     """
     _node_name = node_name if node_name and node_name != 'None' else host_name
@@ -146,25 +146,25 @@ def add(chef_env, host_name, node_name=None, **kwargs):
         )
     )
 
-    if 'databags' in kwargs:
-        print(green("Retrieving existing DataBag items..."))
-        exists_databag_item_names = get_exists_databag_item_names()
+    if 'vaults' in kwargs:
+        print(green("Retrieving existing Vault items..."))
+        exists_vault_item_names = get_exists_vault_item_names()
 
-        databags = kwargs['databags']
-        databag_item_names_tobe_access = set()
-        for p, i in itr.product([re.compile(x.strip()) for x in databags.split(',')], exists_databag_item_names):
+        vaults = kwargs['vaults']
+        vault_item_names_tobe_access = set()
+        for p, i in itr.product([re.compile(x.strip()) for x in vaults.split(',')], exists_vault_item_names):
             if p.match(i):
-                databag_item_names_tobe_access.add(i)
+                vault_item_names_tobe_access.add(i)
 
-        if databag_item_names_tobe_access:
-            for i in databag_item_names_tobe_access:
-                print(green("Grant access to DataBag item %s..." % i))
-                (databag_name, item_name) = parse_databag_item_name(i)
-                printt(knife('vault update %s %s -C "%s"' % (databag_name, item_name, _node_name)))
+        if vault_item_names_tobe_access:
+            for i in vault_item_names_tobe_access:
+                print(green("Grant access to Vault item %s..." % i))
+                (vault_name, item_name) = parse_vault_item_name(i)
+                printt(knife('vault update %s %s -C "%s"' % (vault_name, item_name, _node_name)))
         else:
             print(yellow(
-                "No DataBag item matches the specified pattern %s." %
-                ", ".join(databags)
+                "No Vault item matches the specified pattern %s." %
+                ", ".join(vaults)
             ))
 
     if 'tags' in kwargs:

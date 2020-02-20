@@ -90,7 +90,7 @@ from fabricchef.tasks.common import *
 # Import Fabric tasks for Chef component you want to operate. (Must be use import syntax.
 import fabricchef.tasks.env as env
 import fabricchef.tasks.role as role
-import fabricchef.tasks.databag as databag
+import fabricchef.tasks.vault as vault
 import fabricchef.tasks.node as node
 import fabricchef.tasks.recipe as recipe
 
@@ -120,7 +120,7 @@ $ fab env.list
 
 * Execute multiple commands.(Execute sequentially)
   ```
-  $ fab env.list databag.list
+  $ fab env.list vault.list
   ```
 
 * Dry-Run.
@@ -155,9 +155,9 @@ Available commands:
     conf           Specify path of Knife config file.(Default ./chef/knife.rb...
     dryrun         Enable Dry-Run mode. Do NOT update anything.
     output         Specify output format. (table|text|json|flat) (Default table)
-    databag.apply  Create DataBag item. (and grant admin permission)
-    databag.list   List all DataBag items.
-    databag.show   Show DataBag item.
+    vault.apply    Create Vault item. (and grant admin permission)
+    vault.list     List all Vault items.
+    vault.show     Show Vault item.
     env.apply      Create or Update Environment(s) from specified path(dir or...
     env.list       List all Environments in Organization.
     env.show       Show current Environment.
@@ -184,13 +184,13 @@ Displaying detailed information for task 'node.add':
       Add node with specified name in Environment prod_ssk.
       $ fab add_node:prod,foobar.example.com,foobar
 
-      Add node with same name as host in Environment prod_ssk, and  grant access to DataBag items*_prod.
+      Add node with same name as host in Environment prod_ssk, and  grant access to Vault items*_prod.
       $ fab add_node:prod,foobar.example.com,None,".*_prod"
 
     :param chef_env: Add to Chef Environment.
     :param host_name: Host name of node to be added.
     :param node_name: Node name. Use host name if specified None.  (Default Use host_name as node name)
-    :param accessible_databag_item_patterns: DataBag item(s) accessed from added node.(Can use regex) (Default nothing)
+    :param accessible_vault_item_patterns: Vault item(s) accessed from added node.(Can use regex) (Default nothing)
 
     Arguments: chef_env, host_name, node_name=None
 ```
