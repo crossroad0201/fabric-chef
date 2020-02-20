@@ -36,16 +36,29 @@ def list(chef_env=None):
         table.align["RunList"] = 'l'
         for i in sorted(j['rows'], key=lambda x: x['name']):
             a = i['automatic']
-            table.add_row([
-                i['name'],
-                "%s(%s)" % (a['platform'], a['platform_version']),
-                a['fqdn'],
-                a['ipaddress'],
-                a['uptime'],
-                i['chef_environment'],
-                ",".join(i['normal']['tags']),
-                ",".join(i['run_list'])
-            ])
+            if 'fqdn' in a:
+                table.add_row([
+                    i['name'],
+                    "%s(%s)" % (a['platform'], a['platform_version']),
+                    a['fqdn'],
+                    a['ipaddress'],
+                    a['uptime'],
+                    i['chef_environment'],
+                    ",".join(i['normal']['tags']),
+                    ",".join(i['run_list'])
+                ])
+            else:
+                table.add_row([
+                    i['name'],
+                    "",
+                    "",
+                    "",
+                    "Unknown",
+                    "",
+                    "",
+                    ""
+                ])
+
         print(table)
         print("%s Node(s)" % len(j['rows']))
 
@@ -101,7 +114,7 @@ def show(node_name):
 
 
 @task
-def add(chef_env, host_name, node_name=None, **kwargs):
+def add(chef_env, host_name, **kwargs):
     """
     Add Node to current Environment.
 
@@ -110,19 +123,19 @@ def add(chef_env, host_name, node_name=None, **kwargs):
       $ fab node.add:prod,foobar.example.com
 
       Add node with specified name in Environment prod.
-      $ fab node.add:prod,foobar.example.com,foobar
+      $ fab node.add:prod,foobar.example.com,node_name=foobar
 
       Grant access to Vault items '*_prod', and create tag 'foo' and 'bar'.
-      $ fab node.add:prod,foobar.example.com,None,vaults=".*_prod",tags="foo,bar"
+      $ fab node.add:prod,foobar.example.com,None,vaults=".*_prod",tags="foo bar"
 
     :param chef_env: Add to Chef Environment.
     :param host_name: Host name of node to be added.
-    :param node_name: Node name. Use host name if specified None.  (Default Use host_name as node name)
     :param kwargs: Options.
-        vaults - Vault item(s) accessed.(Can use regex)
-        tags     - Tags.
+        node_name - Node name. (Default Use host_name as node name)
+        vaults    - Vault item(s) accessed. Space separated values. Can use regex.
+        tags      - Tag(s). Space separated values.
     """
-    _node_name = node_name if node_name and node_name != 'None' else host_name
+    _node_name = kwargs['node_name'] if 'node_name' in kwargs else host_name
 
     print(green("Adding Node %s(Host=%s) in Environment %s..." % (_node_name, host_name, chef_env)))
     printt(
@@ -138,7 +151,7 @@ def add(chef_env, host_name, node_name=None, **kwargs):
 
         vaults = kwargs['vaults']
         vault_item_names_tobe_access = set()
-        for p, i in itr.product([re.compile(x.strip()) for x in vaults.split(',')], exists_vault_item_names):
+        for p, i in itr.product([re.compile(x.strip()) for x in vaults.split(' ')], exists_vault_item_names):
             if p.match(i):
                 vault_item_names_tobe_access.add(i)
 
@@ -156,7 +169,7 @@ def add(chef_env, host_name, node_name=None, **kwargs):
     if 'tags' in kwargs:
         tags = kwargs['tags']
         print(green("Creating tag(s) %s..." % tags))
-        printt(knife('tag create %s %s' % (_node_name, tags.replace(',', ' '))))
+        printt(knife('tag create %s %s' % (_node_name, tags)))
 
     if not env.DryRun:
         show(_node_name)
