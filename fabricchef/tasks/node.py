@@ -115,7 +115,7 @@ def show(node_name, show_all_attrs='False'):
 
 
 @task
-def add(chef_env, host_name, node_name=None, *accessible_databag_item_patterns):
+def add(chef_env, host_name, node_name=None, **kwargs):
     """
     Add Node to current Environment.
 
@@ -126,13 +126,15 @@ def add(chef_env, host_name, node_name=None, *accessible_databag_item_patterns):
       Add node with specified name in Environment prod.
       $ fab node.add:prod,foobar.example.com,foobar
 
-      Add node with same name as host in Environment prod, and  grant access to DataBag items*_prod.
-      $ fab node.add:prod,foobar.example.com,None,".*_prod"
+      Grant access to DataBag items '*_prod', and create tag 'foo' and 'bar'.
+      $ fab node.add:prod,foobar.example.com,None,databags=".*_prod",tags="foo,bar"
 
     :param chef_env: Add to Chef Environment.
     :param host_name: Host name of node to be added.
     :param node_name: Node name. Use host name if specified None.  (Default Use host_name as node name)
-    :param accessible_databag_item_patterns: DataBag item(s) accessed from added node.(Can use regex) (Default nothing)
+    :param kwargs: Options.
+        databags - DataBag item(s) accessed.(Can use regex)
+        tags     - Tags.
     """
     _node_name = node_name if node_name and node_name != 'None' else host_name
 
@@ -144,12 +146,13 @@ def add(chef_env, host_name, node_name=None, *accessible_databag_item_patterns):
         )
     )
 
-    if accessible_databag_item_patterns:
+    if 'databags' in kwargs:
         print(green("Retrieving existing DataBag items..."))
         exists_databag_item_names = get_exists_databag_item_names()
 
+        databags = kwargs['databags']
         databag_item_names_tobe_access = set()
-        for p, i in itr.product([re.compile(x) for x in accessible_databag_item_patterns], exists_databag_item_names):
+        for p, i in itr.product([re.compile(x.strip()) for x in databags.split(',')], exists_databag_item_names):
             if p.match(i):
                 databag_item_names_tobe_access.add(i)
 
@@ -161,8 +164,13 @@ def add(chef_env, host_name, node_name=None, *accessible_databag_item_patterns):
         else:
             print(yellow(
                 "No DataBag item matches the specified pattern %s." %
-                ", ".join(accessible_databag_item_patterns)
+                ", ".join(databags)
             ))
+
+    if 'tags' in kwargs:
+        tags = kwargs['tags']
+        print(green("Creating tag(s) %s..." % tags))
+        printt(knife('tag create %s %s' % (_node_name, tags.replace(',', ' '))))
 
     if not env.DryRun:
         show(_node_name)
