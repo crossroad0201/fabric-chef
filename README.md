@@ -56,6 +56,9 @@ $ pip install git+https://github.com/crossroad0201/fabric-chef.git [-U]
 
 Put the Fabric script file called 'fabfile.py' in your chef repository.
 
+The /.chef directory and files under that can generate using 'create_chef_repo' task. 
+See more information '$ fab -d create_chef_repo`.
+
 ```
 /[Your Chef repository]
   +- /.chef
