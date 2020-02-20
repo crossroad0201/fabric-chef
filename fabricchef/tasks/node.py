@@ -113,10 +113,10 @@ def show(node_name):
     )
 
 
-@task
+@task(alias='bootstrap')
 def add(chef_env, host_name, **kwargs):
     """
-    Add Node to current Environment.
+    Add(Bootstrap) Node to current Environment.
 
     Example)
       Add node with same name as host in Environment prod.
