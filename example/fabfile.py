@@ -17,3 +17,15 @@ import fabricchef.tasks.role as role
 import fabricchef.tasks.vault as vault
 import fabricchef.tasks.node as node
 import fabricchef.tasks.recipe as recipe
+
+
+@task
+def init_chef_repo(user, client_key_path, editor='vim'):
+    """
+    Init this directory as chef repository.
+
+    :param user: Chef user.
+    :param client_key_path: Your private key file path.
+    :param editor: Editor you use. (Default vim)
+    """
+    create_chef_repo("https://example.com", "example", user, client_key_path, editor)
