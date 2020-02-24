@@ -76,7 +76,7 @@ def show(vault_item_name):
 
         print(blue("Vault item:"))
         table1 = PrettyTable()
-        table1.add_column("Name", "%s %s" % (vault_name, [j['id']]), 'l')
+        table1.add_column("Name", ["%s %s" % (vault_name, [j['id']])], 'l')
         table1.add_column("Admins", [", ".join(j['admins'])], 'l')
         print(table1)
 
@@ -84,7 +84,7 @@ def show(vault_item_name):
         table2 = PrettyTable(["Client"])
         table2.align["Client"] = 'l'
         for i in j['clients']:
-            table2.add_row(i)
+            table2.add_row([i])
         print(table2)
 
         print(blue("Values:"))
