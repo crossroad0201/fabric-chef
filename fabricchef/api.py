@@ -50,10 +50,12 @@ def print_dict_as_flat_table(dict_value):
     table = PrettyTable(["Key", "Value"])
     table.align["Key"] = 'l'
     table.align["Value"] = 'l'
-    for key, value in sorted(flatten(dict_value, '.').items()):
+
+    flattened_values = flatten(dict_value, '.')
+    for key, value in sorted(flattened_values.items()):
         table.add_row([shorten(key, 95, 5), shorten(value, 95, 5)])
     print(table)
-    print("%s item(s)" % len(dict_value))
+    print("%s item(s)" % len(flattened_values))
 
 
 def printf(fn_knife,
