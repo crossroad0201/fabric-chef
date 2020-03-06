@@ -39,7 +39,7 @@ def dryrun():
     env.DryRun = True
 
 
-@tssk
+@task
 def sudopass(sudo_password):
     """
     Set sudo password for 'knife ssh' command. (CAUTION Visible your password on console log)
