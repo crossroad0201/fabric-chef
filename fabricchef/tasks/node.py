@@ -44,7 +44,7 @@ def list(chef_env=None):
                     a['ipaddress'],
                     a['uptime'],
                     i['chef_environment'],
-                    ",".join(i['normal']['tags']),
+                    ",".join(i['normal']['tags']) if i['normal']['tags'] else "",
                     ",".join(i['run_list'])
                 ])
             else:
