@@ -168,8 +168,36 @@ def add(chef_env, host_name, **kwargs):
 
     if 'tags' in kwargs:
         tags = kwargs['tags']
-        print(green("Creating tag(s) %s..." % tags))
-        printt(knife('tag create %s %s' % (_node_name, tags)))
+        add_tag(_node_name, tags)
 
     if not env.DryRun:
         show(_node_name)
+
+
+@task
+def add_tag(node_name, *args):
+    """
+    Add tag(s) to specified Node.
+
+    Example)
+      $ fab add_tag:foobar.example.com,foo,bar
+
+    :param node_name: Node name.
+    :param args: Tag(s).
+    """
+    space_separated_tags = ' '.join(args)
+    print(green("Adding tag(s) %s to node %s..." % (space_separated_tags, node_name)))
+    printt(knife('tag create %s %s' % (node_name, space_separated_tags)))
+
+
+@task
+def delete_tag(node_name, *args):
+    """
+    Delete tas(s) from specified Node.
+
+    :param node_name: Node name.
+    :param args: Tag(s).
+    """
+    space_separated_tags = ' '.join(args)
+    print(green("Deleting tag(s) %s to node %s..." % (space_separated_tags, node_name)))
+    printt(knife('tag delete %s %s' % (node_name, space_separated_tags)))
