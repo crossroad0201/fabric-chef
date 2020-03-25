@@ -28,10 +28,11 @@ def run(node_name, *run_lists):
             )
         )
     else:
+        _sudo_pass_option = '--ssh-password=\'%s\'' % env.SudoPassword if env.SudoPassword else ''
         printt(
             knife(
-                'ssh \'name:%s\' \'sudo chef-client --override-runlist "%s"\'' %
-                (node_name, ",".join(run_lists)),
+                'ssh \'name:%s\' \'sudo chef-client --override-runlist "%s"\' %s' %
+                (node_name, ",".join(run_lists), _sudo_pass_option),
                 always_run=True
             )
         )

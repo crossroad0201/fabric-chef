@@ -42,7 +42,7 @@ def dryrun():
 @task
 def sudopass(sudo_password):
     """
-    Set sudo password for 'knife ssh' command. (CAUTION Visible your password on console log)
+    Set sudo password for 'knife bootstrap' and 'knife ssh' command. (CAUTION Visible your password on console log)
 
     If set sudo password via this task, will be not prompt sudo password at every sudo command.
 

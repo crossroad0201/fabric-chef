@@ -138,10 +138,11 @@ def add(chef_env, host_name, **kwargs):
     _node_name = kwargs['node_name'] if 'node_name' in kwargs else host_name
 
     print(green("Adding Node %s(Host=%s) in Environment %s..." % (_node_name, host_name, chef_env)))
+    _sudo_pass_option = '--use-sudo-password --ssh-password=\'%s\'' % env.SudoPassword if env.SudoPassword else ''
     printt(
         knife(
-            'bootstrap %s --sudo --ssh-user=`whoami` --node-name=%s --environment=%s' %
-            (host_name, _node_name, chef_env)
+            'bootstrap %s --sudo --ssh-user=`whoami` --node-name=%s --environment=%s %s' %
+            (host_name, _node_name, chef_env, _sudo_pass_option)
         )
     )
 
