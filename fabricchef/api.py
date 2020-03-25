@@ -19,8 +19,13 @@ def knife(command_and_option, always_run=False):
     def fn_knife(knife_format):
         # Add --config option if set knife conf path.
         conf_option = '--config 5s' % env.KnifeConfPath if env.KnifeConfPath else ''
-        # Add --ssh-password option if ssh command and set sudo password.
-        ssh_pass_option = '--ssh-password %s' % env.SudoPassword if command_and_option.startswith('ssh') and env.SudoPassword else ''
+
+        # Add sudo password option.
+        sudo_pass_option = ''
+        if command_and_option.startswith('ssh') and env.SudoPassword:
+            sudo_pass_option = '--ssh-password=\'%s\'' % env.SudoPassword
+        elif command_and_option.startswith('bootstrap') and env.SudoPassword:
+            sudo_pass_option = ' --use-sudo-password --ssh-password=\'%s\'' % env.SudoPassword
 
         # FIXME
         if not always_run and False: #env.DryRun:
@@ -28,7 +33,7 @@ def knife(command_and_option, always_run=False):
             return '{}'
         else:
             if knife_format  == 'text':
-                return local('knife %s %s %s' % (command_and_option, conf_option, ssh_pass_option), capture=True)
+                return local('knife %s %s %s' % (command_and_option, conf_option, sudo_pass_option), capture=True)
             else:
                 return local('knife %s -F %s %s' % (command_and_option, knife_format, conf_option), capture=True)
 

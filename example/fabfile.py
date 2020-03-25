@@ -12,7 +12,7 @@ from fabric.api import *
 
 from fabricchef.api import *
 from fabricchef.tasks.common import *
-import fabricchef.tasks.env as env
+import fabricchef.tasks.chefenv as chefenv
 import fabricchef.tasks.role as role
 import fabricchef.tasks.vault as vault
 import fabricchef.tasks.node as node

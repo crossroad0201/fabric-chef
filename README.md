@@ -91,7 +91,7 @@ from fabricchef.api import *
 from fabricchef.tasks.common import *
 
 # Import Fabric tasks for Chef component you want to operate. (Must be use import syntax.
-import fabricchef.tasks.env as env
+import fabricchef.tasks.chefenv as chefenv
 import fabricchef.tasks.role as role
 import fabricchef.tasks.vault as vault
 import fabricchef.tasks.node as node
@@ -108,7 +108,7 @@ def custom_task():
 Run `fab` command with any task.
 
 ```
-$ fab env.list
+$ fab chefenv.list
 -> Should be show all Chef Environments in your Chef Organization.
 ```
 
@@ -118,12 +118,12 @@ $ fab env.list
 
 * Execute single command. 
   ```
-  $ fab env.list
+  $ fab chefenv.list
   ```
 
 * Execute multiple commands.(Execute sequentially)
   ```
-  $ fab env.list vault.list
+  $ fab chefenv.list vault.list
   ```
 
 * Dry-Run.
@@ -133,12 +133,12 @@ $ fab env.list
 
 * Specify knife config.
   ```
-  $ fab conf:foobar/.chef/knife.rb env.list
+  $ fab conf:foobar/.chef/knife.rb chefenv.list
   ```
 
 * Specify output format os json.(Available table, text, json and flat)
   ```
-  $ fab output:json env.list
+  $ fab output:json chefenv.list
   ```
 
 * Combining some options.
@@ -161,9 +161,9 @@ Available commands:
     vault.apply    Create Vault item. (and grant admin permission)
     vault.list     List all Vault items.
     vault.show     Show Vault item.
-    env.apply      Create or Update Environment(s) from specified path(dir or...
-    env.list       List all Environments in Organization.
-    env.show       Show current Environment.
+    chefenv.apply  Create or Update Environment(s) from specified path(dir or...
+    chefenv.list   List all Environments in Organization.
+    chefenv.show   Show current Environment.
     node.add       Add Node to current Environment.
     node.list      List Nodes in specified Environment.
     node.show      Show Node.
